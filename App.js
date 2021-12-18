@@ -2,11 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 'react-native';
 
+import ListCounter from './components/ListCounter';
 import ShoppingListInput from './components/ShoppingListInput';
 import ShoppingListItem from './components/ShoppingListItem';
 
 export default function App() {
   const [shoppingListItems, setShoppingListItems] = useState([]);
+  const [isAddPopupVisible, setIsAddPopupVisible] = useState(false);
 
   function addToShoppingList(itemToAdd) {
     setShoppingListItems(currentItems => {
@@ -30,7 +32,21 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.appTitle}>Create Shopping List!</Text>
-      <ShoppingListInput onAdd={addToShoppingList} />
+      <ListCounter count={shoppingListItems.length} />
+      <Button
+        title={'Add new item'}
+        onPress={() => {
+          // window.alert('ez egy popup');
+          setIsAddPopupVisible(true);
+        }}
+      />
+      <ShoppingListInput
+        onAdd={addToShoppingList}
+        visible={isAddPopupVisible}
+        onCancel={() => {
+          setIsAddPopupVisible(false);
+        }}
+      />
       <View style={styles.shoppingList} showsVerticalScrollIndicator={false}>
         <FlatList
           data={shoppingListItems}
